@@ -1,0 +1,98 @@
+<div class="page">
+  <header class="masthead">
+    <h1>DS&nbsp;Rename</h1>
+  </header>
+
+  <p>This tool lets you rename multiple data set names automatically. Enter the data set names, define a search and replace pattern, and generate the corresponding JCL script.</p>
+  <main class="grid">
+    <!-- ------------------------------------------------------------------ -->
+    <!-- Input                                                              -->
+    <!-- ------------------------------------------------------------------ -->
+    <section class="card">
+      <h2>1&nbsp;· Data Sets</h2>
+      <label class="field">
+        <span class="label">Data set names (one per line)</span>
+        <textarea
+          rows="8"
+          spellcheck="false"
+          [ngModel]="datasetsRaw()"
+          (ngModelChange)="datasetsRaw.set($event)"
+          placeholder="PROD.PAYROLL.CNTL&#10;PROD.PAYROLL.LOAD"
+        ></textarea>
+      </label>
+
+      <h2>2&nbsp;· Replacement</h2>
+      <div class="row">
+        <label class="field">
+          <span class="label">Search</span>
+          <input
+            type="text"
+            [ngModel]="search()"
+            (ngModelChange)="search.set($event)"
+            placeholder="PROD"
+          />
+        </label>
+        <span class="arrow">→</span>
+        <label class="field">
+          <span class="label">Replace with</span>
+          <input
+            type="text"
+            [ngModel]="replace()"
+            (ngModelChange)="replace.set($event)"
+            placeholder="TEST"
+          />
+        </label>
+      </div>
+
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- Rename preview                                                     -->
+    <!-- ------------------------------------------------------------------ -->
+    <section class="card">
+      <h2>3&nbsp;· Preview</h2>
+      @if (results().length === 0) {
+        <p class="empty">No data sets entered yet.</p>
+      } @else {
+        <p class="summary">
+          {{ changedCount() }} of {{ results().length }} data sets will be renamed.
+          @if (hasErrors()) {
+            <span class="warn">⚠ Invalid target names present</span>
+          }
+        </p>
+        <ul class="preview">
+          @for (r of results(); track r.oldName) {
+            <li [class.unchanged]="!r.changed" [class.invalid]="r.error">
+              <code class="old">{{ r.oldName }}</code>
+              @if (r.changed) {
+                <span class="arrow">→</span>
+                <code class="new">{{ r.newName }}</code>
+                @if (r.error) {
+                  <span class="err">{{ r.error }}</span>
+                }
+              } @else {
+                <span class="skip">unchanged</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+    <!-- Generated JCL                                                      -->
+    <!-- ------------------------------------------------------------------ -->
+    <section class="card output">
+      <div class="output-head">
+        <h2>4&nbsp;· JCL</h2>
+        <div class="actions">
+          <button type="button" (click)="copyJcl()">
+            {{ copied() ? '✓ Copied' : 'Copy' }}
+          </button>
+          <button type="button" class="ghost" (click)="downloadJcl()">Download</button>
+        </div>
+      </div>
+      <pre class="jcl"><code>{{ jclOutput() }}</code></pre>
+    </section>
+  </main>
+</div>

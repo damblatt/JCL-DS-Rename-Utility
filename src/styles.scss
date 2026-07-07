@@ -1,0 +1,37 @@
+/* Globale Styles & Theme-Variablen */
+
+:root {
+  --bg: #0d1117;
+  --bg-elev: #161b22;
+  --bg-input: #0b0f14;
+  --border: #2b3440;
+  --border-strong: #3d4a5a;
+  --text: #e6edf3;
+  --text-dim: #9aa7b4;
+  --accent: #39d353;
+  --accent-dim: #2ea043;
+  --arrow: #58a6ff;
+  --warn: #f0883e;
+  --error: #f85149;
+  --font-mono: 'SFMono-Regular', 'JetBrains Mono', 'Cascadia Code', Consolas,
+    'Liberation Mono', Menlo, monospace;
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  line-height: 1.5;
+}

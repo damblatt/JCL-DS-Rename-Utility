@@ -1,0 +1,258 @@
+:host {
+  display: block;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+/* ---- Header ----------------------------------------------------------- */
+.masthead {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 1.9rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+
+  .subtitle {
+    margin: 0.25rem 0 0;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+  }
+}
+
+/* ---- Layout --------------------------------------------------------- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+
+  h2 {
+    margin: 0 0 0.75rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  h2:not(:first-child) {
+    margin-top: 1.5rem;
+  }
+}
+
+/* The output panel spans the full width. */
+.card.output {
+  grid-column: 1 / -1;
+}
+
+/* ---- Form fields ------------------------------------------------------ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+
+  .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+}
+
+input[type='text'],
+textarea {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 0.55rem 0.7rem;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent-dim);
+    box-shadow: 0 0 0 2px rgba(46, 160, 67, 0.25);
+  }
+
+  &::placeholder {
+    color: #4a5563;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.arrow {
+  color: var(--arrow);
+  font-size: 1.2rem;
+  padding-bottom: 0.4rem;
+}
+
+/* ---- Preview ----------------------------------------------------------- */
+.summary {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin: 0 0 0.75rem;
+
+  .warn {
+    color: var(--warn);
+    margin-left: 0.5rem;
+  }
+}
+
+.empty {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.preview {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  max-height: 320px;
+  overflow-y: auto;
+
+  li {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.4rem 0.55rem;
+    border-radius: 6px;
+    background: var(--bg-input);
+    font-size: 0.85rem;
+
+    &.unchanged {
+      opacity: 0.55;
+    }
+
+    &.invalid {
+      border: 1px solid var(--error);
+    }
+  }
+
+  code {
+    font-family: var(--font-mono);
+  }
+
+  .old {
+    color: var(--text-dim);
+  }
+
+  .new {
+    color: var(--accent);
+  }
+
+  .skip {
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 0.78rem;
+  }
+
+  .err {
+    color: var(--error);
+    font-size: 0.78rem;
+  }
+}
+
+/* ---- Output --------------------------------------------------------- */
+.output-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent-dim);
+  background: var(--accent-dim);
+  color: #06120a;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  &.ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+}
+
+.jcl {
+  margin: 0;
+  background: #05080c;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    white-space: pre;
+    line-height: 1.55;
+  }
+}
+
+/* ---- Footer ------------------------------------------------------------ */
+.footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+
+  code {
+    font-family: var(--font-mono);
+    color: var(--text);
+  }
+}
+
+/* ---- Responsive -------------------------------------------------------- */
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
