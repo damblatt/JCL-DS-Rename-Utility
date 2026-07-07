@@ -89,11 +89,11 @@ textarea {
   &:focus {
     outline: none;
     border-color: var(--accent-dim);
-    box-shadow: 0 0 0 2px rgba(46, 160, 67, 0.25);
+    box-shadow: 0 0 0 2px rgba(0, 145, 117, 0.25);
   }
 
   &::placeholder {
-    color: #4a5563;
+    color: #a89a7d;
   }
 }
 
@@ -204,7 +204,7 @@ button {
   border-radius: 6px;
   border: 1px solid var(--accent-dim);
   background: var(--accent-dim);
-  color: #06120a;
+  color: #fffdf8;
   cursor: pointer;
   transition: filter 0.15s ease;
 
@@ -221,7 +221,7 @@ button {
 
 .jcl {
   margin: 0;
-  background: #05080c;
+  background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
@@ -230,7 +230,7 @@ button {
   code {
     font-family: var(--font-mono);
     font-size: 0.85rem;
-    color: var(--accent);
+    color: var(--text);
     white-space: pre;
     line-height: 1.55;
   }
