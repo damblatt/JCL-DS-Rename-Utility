@@ -1,59 +1,26 @@
-# JclDsRename
+# JCL DS Rename Utility
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.5.
+A small web app for generating IDCAMS JCL to bulk-rename z/OS data sets.
 
-## Development server
+## What it does
 
-To start a local development server, run:
+You enter a list of data set names (one per line) along with a search and replace pattern for a qualifier (e.g. `PROD` → `TEST`). The tool:
 
-```bash
-ng serve
-```
+- replaces exactly matching qualifiers (name parts between the dots) in each data set name,
+- validates the new names against z/OS naming rules (max. 44 characters total, max. 8 characters per qualifier, valid characters, no empty qualifiers),
+- shows a preview of all changes, including any validation errors,
+- generates ready-to-use IDCAMS JCL (`ALTER ... NEWNAME(...)`), which can be copied or downloaded as a `.jcl` file.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The generated JCL does not include a job card; you'll need to add one before running it.
 
-## Code scaffolding
+## Technology
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The project is built with [Angular](https://angular.dev) (CLI version 22.0.5) using signals and standalone components. The rename and JCL generation logic lives in `src/app/jcl.service.ts`, the UI in `src/app/app.ts` / `src/app/app.html`.
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Development
 
 ```bash
-ng generate --help
+ng serve      # dev server at http://localhost:4200/ (live reload)
+ng build      # production build to dist/
+ng test       # unit tests with Vitest
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
