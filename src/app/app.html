@@ -96,7 +96,7 @@
           <button type="button" class="ghost" (click)="downloadJcl()">Download</button>
         </div>
       </div>
-      <pre class="jcl"><code>{{ jclOutput() }}</code></pre>
+      <pre class="jcl"><code [innerHTML]="jclHighlighted()"></code></pre>
     </section>
   </main>
 </div>

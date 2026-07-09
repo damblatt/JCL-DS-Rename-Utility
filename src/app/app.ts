@@ -41,6 +41,9 @@ export class App {
   /** The generated IDCAMS JCL. */
   readonly jclOutput = computed(() => this.jcl.generateJcl(this.results()));
 
+  /** The generated JCL, syntax-highlighted as HTML. */
+  readonly jclHighlighted = computed(() => this.jcl.highlightJcl(this.jclOutput()));
+
   /** Copies the generated JCL to the clipboard. */
   async copyJcl(): Promise<void> {
     try {

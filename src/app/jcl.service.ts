@@ -131,4 +131,74 @@ export class JclService {
     const safeFirst = first.length > MAX_CONTROL_COL ? `  ALTER -\n        ${result.oldName} -` : first;
     return [safeFirst, second];
   }
+
+  /**
+   * Renders the generated JCL as syntax-highlighted HTML.
+   */
+  highlightJcl(jcl: string): string {
+    return jcl
+      .split('\n')
+      .map((line) => this.highlightLine(line))
+      .join('\n');
+  }
+
+  private highlightLine(line: string): string {
+    if (line.length === 0) {
+      return '';
+    }
+
+    // Comment / terminator lines, e.g. "/*" or "/* No data sets to rename */".
+    if (line.startsWith('/*')) {
+      return `<span class="jcl-comment">${escapeHtml(line)}</span>`;
+    }
+
+    // JCL statement lines, e.g. "//RENAME EXEC PGM=IDCAMS" or "//SYSPRINT DD SYSOUT=*".
+    const stmt = line.match(/^(\/\/)(\S+)?(\s+)(EXEC|DD)(\s+)(.*)$/);
+    if (stmt) {
+      const [, slashes, name, ws1, verb, ws2, rest] = stmt;
+      const nameHtml = name ? `<span class="jcl-name">${escapeHtml(name)}</span>` : '';
+      return `<span class="jcl-slashes">${slashes}</span>${nameHtml}${ws1}<span class="jcl-keyword">${verb}</span>${ws2}${this.highlightParams(rest)}`;
+    }
+
+    // IDCAMS control statements: ALTER / NEWNAME(...) / continuation lines.
+    const [, indent, rawBody] = line.match(/^(\s*)(.*)$/)!;
+    let body = rawBody;
+    let contWs = '';
+    let cont = '';
+    if (body.endsWith('-')) {
+      cont = '-';
+      body = body.slice(0, -1);
+      contWs = body.match(/\s*$/)![0];
+      body = body.slice(0, body.length - contWs.length);
+    }
+
+    const alter = body.match(/^(ALTER)(\s+)(.*)$/);
+    const newname = body.match(/^(NEWNAME)(\()(.*)(\))$/);
+    let bodyHtml: string;
+    if (alter) {
+      const [, kw, ws, dsn] = alter;
+      bodyHtml = `<span class="jcl-keyword">${kw}</span>${ws}<span class="jcl-dsn">${escapeHtml(dsn)}</span>`;
+    } else if (newname) {
+      const [, kw, lp, dsn, rp] = newname;
+      bodyHtml = `<span class="jcl-keyword">${kw}</span>${lp}<span class="jcl-dsn">${escapeHtml(dsn)}</span>${rp}`;
+    } else if (/^[A-Z0-9.#@$-]+$/.test(body)) {
+      bodyHtml = `<span class="jcl-dsn">${escapeHtml(body)}</span>`;
+    } else {
+      bodyHtml = escapeHtml(body);
+    }
+
+    return `${indent}${bodyHtml}${contWs}${cont ? `<span class="jcl-cont">${cont}</span>` : ''}`;
+  }
+
+  /** Highlights "KEY=VALUE" parameters, e.g. "PGM=IDCAMS" or "SYSOUT=*". */
+  private highlightParams(rest: string): string {
+    return escapeHtml(rest).replace(
+      /([A-Z]+)=(\S+)/g,
+      (_m, key: string, value: string) => `<span class="jcl-param">${key}</span>=<span class="jcl-value">${value}</span>`,
+    );
+  }
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
