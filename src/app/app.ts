@@ -20,16 +20,23 @@ export class App {
   constructor(private readonly jcl: JclService) {}
 
   /** All parsed and renamed data sets, including validation errors. */
-  readonly results = computed<Array<RenameResult & { error: string | null }>>(() => {
+  readonly results = computed<
+    Array<RenameResult & { error: string | null; oldHtml: string; newHtml: string }>
+  >(() => {
     const datasets = this.jcl.parseDatasets(this.datasetsRaw());
     const options = {
       search: this.search(),
       replace: this.replace(),
     };
-    return this.jcl.applyRenameAll(datasets, options).map((r) => ({
-      ...r,
-      error: r.changed ? this.jcl.validateDsn(r.newName) : null,
-    }));
+    return this.jcl.applyRenameAll(datasets, options).map((r) => {
+      const { oldHtml, newHtml } = this.jcl.diffDatasetName(r.oldName, r.newName);
+      return {
+        ...r,
+        error: r.changed ? this.jcl.validateDsn(r.newName) : null,
+        oldHtml,
+        newHtml,
+      };
+    });
   });
 
   /** Number of data sets that will actually be renamed. */

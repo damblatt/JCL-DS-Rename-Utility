@@ -67,10 +67,10 @@
         <ul class="preview">
           @for (r of results(); track r.oldName) {
             <li [class.unchanged]="!r.changed" [class.invalid]="r.error">
-              <code class="old">{{ r.oldName }}</code>
+              <code class="old" [innerHTML]="r.oldHtml"></code>
               @if (r.changed) {
                 <span class="arrow">→</span>
-                <code class="new">{{ r.newName }}</code>
+                <code class="new" [innerHTML]="r.newHtml"></code>
                 @if (r.error) {
                   <span class="err">{{ r.error }}</span>
                 }

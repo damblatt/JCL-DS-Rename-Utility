@@ -133,6 +133,31 @@ export class JclService {
   }
 
   /**
+   * Marks up the qualifiers that differ between the old and new data set name,
+   * so the UI can render the changed qualifier in bold.
+   */
+  diffDatasetName(oldName: string, newName: string): { oldHtml: string; newHtml: string } {
+    const oldParts = oldName.split('.');
+    const newParts = newName.split('.');
+    const changed = new Set<number>();
+    for (let i = 0; i < Math.max(oldParts.length, newParts.length); i++) {
+      if (oldParts[i] !== newParts[i]) {
+        changed.add(i);
+      }
+    }
+    return {
+      oldHtml: this.markQualifiers(oldParts, changed),
+      newHtml: this.markQualifiers(newParts, changed),
+    };
+  }
+
+  private markQualifiers(parts: string[], changed: Set<number>): string {
+    return parts
+      .map((part, i) => (changed.has(i) ? `<b>${escapeHtml(part)}</b>` : `<span class="dim">${escapeHtml(part)}</span>`))
+      .join('.');
+  }
+
+  /**
    * Renders the generated JCL as syntax-highlighted HTML.
    */
   highlightJcl(jcl: string): string {
